@@ -81,8 +81,9 @@ The 4 second delay after this is longer than the 3s cache duration. Therefore on
 What I describe above is a passing run. I added some logs printing exact timestamps when I run this locally. 
 
 ![Passing Run](passing.png)
+The fact that reset is on it's own thread, and we rely on a sleep() to wait for the completion of the thread is what makes this particular test flaky. It is not guaranteed that reset will have completed in the 4s delay between the second and third subscribe. The thread may not be alloted time in that window, and may fail to complete. This can cause the third subscribe to also use the cache and not increment the subscription counter. 
 
-What makes this test flaky is because of the fact that reset is on it's own thread. It is not guaranteed that reset will have completed in the 4s delay between the second and third subscribe. The thread may not be alloted time in that window, and may fail to complete. This can cause the third subscribe to also use the cache and not increment the counter. In the failing case the test fails with supscription count 1.
+In the failing case the test fails with supscription count 1.
 
 
 
