@@ -4,7 +4,7 @@ Here is my analysis for the flaky testCache() in FlowablesTest.java.
 
 **What does the test do?**
 
-At a high level this test is testing flowable cache behavior with a duration of 3s. The test increments a counter when the cache is not used (a new cache is created). This happens at `subscriptionCount.incrementAndGet();` in code block 1.
+At a high level this test is testing flowable cache behavior with a duration of 3s. The test increments a counter when the cache is not used (a new cache is created). This happens at `subscriptionCount.incrementAndGet();` in *CodeBlock1*.
 
 *CodeBlock1*: The Flaky Test
 
@@ -83,7 +83,7 @@ What I describe above is a passing run. I added some logs printing exact timesta
 ![Passing Run](passing.png)
 The fact that reset is on it's own thread, and we rely on a sleep() to wait for the completion of the thread is what makes this particular test flaky. It is not guaranteed that reset will have completed in the 4s delay between the second and third subscribe. The thread may not be alloted time in that window, and may fail to complete. This can cause the third subscribe to also use the cache and not increment the subscription counter. 
 
-In the failing case the test fails with subscriptionCount 1. Note that I added a delay of 1000s in Flowables.java. Exact [diff](https://github.com/nishandhkr/rxjava2-extras/commit/f7368d9a64cd293fc26c1962c5fbaf9b2525079b#diff-1280ed9414e191ce0aeaee536652afb4f3701ff94723810604939678e76e9cae) 
+In the failing case the test fails with subscriptionCount 1. In order to produce the failing behavior I added a delay of 1000ms in the function that is repsonsible for the cache reset. [Exact diff for the change in test code](https://github.com/nishandhkr/rxjava2-extras/commit/f7368d9a64cd293fc26c1962c5fbaf9b2525079b#diff-1280ed9414e191ce0aeaee536652afb4f3701ff94723810604939678e76e9cae) 
 
 ![failing run](failing.png)
 
