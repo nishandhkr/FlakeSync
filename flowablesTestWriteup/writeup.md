@@ -4,7 +4,7 @@ Here is my analysis for the flaky testCache() in FlowablesTest.java.
 
 **What does the test do?**
 
-At a high level this test is testing flowable cache behavior with a duration of 3s. The test increments a counter when the cache is not used (a new cache is created). This happens `subscriptionCount.incrementAndGet();` in code block 1.
+At a high level this test is testing flowable cache behavior with a duration of 3s. The test increments a counter when the cache is not used (a new cache is created). This happens at `subscriptionCount.incrementAndGet();` in code block 1.
 
 *CodeBlock1*: The Flaky Test
 
